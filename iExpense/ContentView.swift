@@ -52,7 +52,7 @@ struct ContentView: View {
                         }
                         Spacer()
                         
-                        Text(""/*costLevel(cost: item.amount)*/)
+                        Text(costLevel(cost: item.amount))
                     }
                 }
                 .onDelete(perform: removeItems)
@@ -73,7 +73,15 @@ struct ContentView: View {
         expenses.items.remove(atOffsets: offsets)
     }
     
-   
+    func costLevel(cost: Double) -> String {
+        if cost < 10 {
+            return "unimportant"
+        } else if cost < 100 {
+            return "average"
+        }else {
+            return "large"
+        }
+    }
     
 }
 
