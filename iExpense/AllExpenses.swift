@@ -11,7 +11,7 @@ import SwiftData
 import SwiftUI
 
 //struct AllExpenses: View {
-//    
+//      
 //    @Query var expenses: [Expense]
 //    
 //    let sortBy: String
