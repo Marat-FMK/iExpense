@@ -6,56 +6,97 @@
 //
 
 import SwiftUI
+import SwiftData
 
-struct ExpenseItem: Identifiable, Codable {
-    var id = UUID()
-    let name: String
-    let type: String
-    let amount: Double
-}
+//struct StyleOfAmount: ViewModifier {
+//    var amount: Double
+//    func body(content: Content) -> some View {
+//        var font = Font.system(size: 22, weight: .heavy, design: .default)
+//        var foregroundColor = Color.black
+//        if amount < 10 {
+//            foregroundColor = Color.blue
+//            
+//        } else if amount == 10 || amount < 100 {
+//            
+//            foregroundColor = Color.purple
+//            font = Font.system(size: 25, weight: .medium, design: .monospaced)
+//        } else {
+//            foregroundColor = Color.red
+//            font = Font.system(size: 30, weight: .bold, design: .rounded)
+//            
+//        }
+//        return content
+//            .foregroundColor(foregroundColor)
+//            .font(font)
+//            .background(Color.yellow)
+//            .clipShape(Capsule())
+//            .padding(2)
+//            .overlay {
+//                Capsule().stroke(lineWidth: 3)
+//            }
+//            
+//    }
+//}
+//
+//extension View {
+//    func castomModifier(amount: Double) -> some View {
+//        modifier(StyleOfAmount(amount: amount))
+//    }
+//}
 
-@Observable
-class Expenses {
-    var items = [ExpenseItem]() {
-        didSet {
-            if let encoded = try? JSONEncoder().encode(items) {
-                UserDefaults.standard.set(encoded, forKey: "Items")
-            }
-        }
-    }
-    init() {
-        if let savedItems = UserDefaults.standard.data(forKey: "Items"){
-            if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems){
-                items = decodedItems
-                return
-            }
-        }
-        items = []
-    }
-}
+//@Observable
+//class Expenses {
+//    var items = [ExpenseItem]() {
+//        didSet {
+//            if let encoded = try? JSONEncoder().encode(items) {
+//                UserDefaults.standard.set(encoded, forKey: "Items")
+//            }
+//        }
+//    }
+//    init() {
+//        if let savedItems = UserDefaults.standard.data(forKey: "Items"){
+//            if let decodedItems = try? JSONDecoder().decode([ExpenseItem].self, from: savedItems){
+//                items = decodedItems
+//                return
+//            }
+//        }
+//        items = []
+//    }
+//}
+
+
+
 
 struct ContentView: View {
-    
-    @State private var expenses = Expenses()
+   
     @State private var showingAddExpense = false
+    @State private var selectorValue = 0
+    
+    let sortTeg = ["All", "Personal", "Busines"]
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(expenses.items) { item in
-                    HStack{
-                        VStack(alignment: .leading) {
-                            Text(item.name)
-                                .font(.headline)
-                                
-                            Text(item.type)
+            Form {
+                Section("Choose sort") {
+                    Picker("Sort", selection: $selectorValue) {
+                        ForEach(0..<3){ number in
+                            Text(sortTeg[number])
                         }
-                        Spacer()
-                        
-                        Text(costLevel(cost: item.amount))
                     }
+                    .pickerStyle(.segmented)
+                    .colorMultiply(.purple)
                 }
-                .onDelete(perform: removeItems)
+                
+                if selectorValue == 0 {
+                    SortedExpenses( sortBy: nil)
+                }
+                if selectorValue == 1 {
+                    SortedExpenses(sortBy: sortTeg[selectorValue])
+                }
+                if selectorValue == 2 {
+                    SortedExpenses(sortBy: sortTeg[selectorValue])
+                }
+                
             }
             .navigationTitle("iExpense")
             .toolbar {
@@ -64,13 +105,13 @@ struct ContentView: View {
                 }
             }
             .sheet(isPresented: $showingAddExpense) {
-                addView(expenses: expenses)
-            }
+                addView()
+        }
         }
     }
     
-    func removeItems(at offsets: IndexSet) {
-        expenses.items.remove(atOffsets: offsets)
+    func removeExpense(at offsets: IndexSet) {
+       
     }
     
     func costLevel(cost: Double) -> String {

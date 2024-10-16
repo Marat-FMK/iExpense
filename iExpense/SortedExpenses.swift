@@ -5,14 +5,33 @@
 //  Created by Marat Fakhrizhanov on 16.10.2024.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SortedExpenses: View {
+    
+    @Query var expenses: [Expense]
+    
+    let sortBy: String?
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Section ( sortBy == nil
+                  ? "All expenses"
+                  : "Sorted by \(sortBy ?? "")" ) {
+            ForEach(sortBy == nil ? expenses : expenses.filter{$0.type == sortBy} , id: \.self) { expense in
+                HStack{
+                    VStack(alignment: .leading) {
+                        Text(expense.name)
+                            .font(.headline)
+                        
+                        Text(expense.type)
+                    }
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    SortedExpenses()
+    SortedExpenses( sortBy: "All")
 }
