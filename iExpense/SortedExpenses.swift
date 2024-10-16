@@ -17,7 +17,7 @@ struct SortedExpenses: View {
     var body: some View {
         Section ( sortBy == nil
                   ? "All expenses"
-                  : "Sorted by \(sortBy ?? "")" ) {
+                  : "Sorted by \(sortBy ?? " ")" ) {
             ForEach(sortBy == nil ? expenses : expenses.filter{$0.type == sortBy} , id: \.self) { expense in
                 HStack{
                     VStack(alignment: .leading) {
