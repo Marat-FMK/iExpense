@@ -72,7 +72,7 @@ struct ContentView: View {
     @State private var showingAddExpense = false
     @State private var selectorValue = 0
     
-    let sortTeg = ["All", "Persona",  "Busines"]
+    let sortTeg = ["All", "Personal",  "Busines"]
     
     var body: some View {
         NavigationStack {
