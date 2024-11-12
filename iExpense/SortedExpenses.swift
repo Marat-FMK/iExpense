@@ -26,6 +26,8 @@ struct SortedExpenses: View {
                         
                         Text(expense.type)
                     }
+                    .accessibilityElement(children: .ignore)
+                    
                 }
             }
         }
