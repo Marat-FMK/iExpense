@@ -28,6 +28,8 @@ struct SortedExpenses: View {
                     }
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(Text("\(expense) - \(String(expense.amount))"))
+                    
+                    .accessibilityHint(expense.type)
                 }
             }
         }
